@@ -128,7 +128,7 @@ Sidebar.Object = function(editor)
     new UI.Number(1).setRange(0.01, Infinity).setWidth('50px').onChange(updateScaleZ);
 
   objectScaleRow.add(new UI.Text('缩放').setWidth('90px'));
-  // objectScaleRow.add(objectScaleLock);
+  objectScaleRow.add(objectScaleLock);
   objectScaleRow.add(objectScaleX, objectScaleY, objectScaleZ);
 
   container.add(objectScaleRow);

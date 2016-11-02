@@ -29,7 +29,7 @@ Menubar.Add = function(editor)
 
   var option = new UI.Row();
   option.setClass('option');
-  option.setTextContent('坐标系网格');
+  option.setTextContent('坐标系');
   option.onClick(function() 
   {
     var mesh = new THREE.Group();
@@ -140,7 +140,7 @@ Menubar.Add = function(editor)
   options.add(option);
 
   // Icosahedron
-
+/*
   var option = new UI.Row();
   option.setClass('option');
   option.setTextContent('二十面体');
@@ -155,7 +155,7 @@ Menubar.Add = function(editor)
     editor.execute(new AddObjectCommand(mesh));
   });
   options.add(option);
-
+*/
   // Torus
 
   var option = new UI.Row();

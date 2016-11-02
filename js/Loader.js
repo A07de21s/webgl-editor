@@ -7,7 +7,6 @@ var Loader = function(editor)
   {
     var filename = file.name;
     var extension = filename.split('.').pop().toLowerCase();
-
     var reader = new FileReader();
     reader.addEventListener('progress', function(event) 
     {
@@ -23,7 +22,6 @@ var Loader = function(editor)
         {
           var loader = new THREE.AMFLoader();
           var amfobject = loader.parse(event.target.result);
-
           editor.execute(new AddObjectCommand(amfobject));
         }, false);
         reader.readAsArrayBuffer(file);
@@ -33,7 +31,6 @@ var Loader = function(editor)
         {
           var loader = new THREE.AWDLoader();
           var scene = loader.parse(event.target.result);
-
           editor.execute(new SetSceneCommand(scene));
         }, false);
         reader.readAsArrayBuffer(file);
@@ -43,10 +40,8 @@ var Loader = function(editor)
         {
           var contents = event.target.result;
           var json = JSON.parse(contents);
-
           var loader = new THREE.BabylonLoader();
           var scene = loader.parse(json);
-
           editor.execute(new SetSceneCommand(scene));
         }, false);
         reader.readAsText(file);
@@ -56,15 +51,11 @@ var Loader = function(editor)
         {
           var contents = event.target.result;
           var json = JSON.parse(contents);
-
           var loader = new THREE.BabylonLoader();
-
           var geometry = loader.parseGeometry(json);
           var material = new THREE.MeshStandardMaterial();
-
           var mesh = new THREE.Mesh(geometry, material);
           mesh.name = filename;
-
           editor.execute(new AddObjectCommand(mesh));
         }, false);
         reader.readAsText(file);
@@ -75,18 +66,14 @@ var Loader = function(editor)
           var data = new Uint8Array(event.target.result);
           var stream = new CTM.Stream(data);
           stream.offset = 0;
-
           var loader = new THREE.CTMLoader();
           loader.createModel(new CTM.File(stream), function(geometry) 
           {
             geometry.sourceType = "ctm";
             geometry.sourceFile = file.name;
-
             var material = new THREE.MeshStandardMaterial();
-
             var mesh = new THREE.Mesh(geometry, material);
             mesh.name = filename;
-
             editor.execute(new AddObjectCommand(mesh));
           });
         }, false);
@@ -96,12 +83,9 @@ var Loader = function(editor)
         reader.addEventListener('load', function(event) 
         {
           var contents = event.target.result;
-
           var loader = new THREE.ColladaLoader();
           var collada = loader.parse(contents);
-
           collada.scene.name = filename;
-
           editor.execute(new AddObjectCommand(collada.scene));
         }, false);
         reader.readAsText(file);
@@ -110,10 +94,8 @@ var Loader = function(editor)
         reader.addEventListener('load', function(event) 
         {
           var contents = event.target.result;
-
           var loader = new THREE.FBXLoader();
           var object = loader.parse(contents);
-
           editor.execute(new AddObjectCommand(object));
         }, false);
         reader.readAsText(file);
@@ -123,7 +105,6 @@ var Loader = function(editor)
         {
           var contents = event.target.result;
           var json = JSON.parse(contents);
-
           var loader = new THREE.GLTFLoader();
           loader.parse(json, function(result) 
           {
@@ -142,30 +123,22 @@ var Loader = function(editor)
         reader.addEventListener('load', function(event) 
         {
           var contents = event.target.result;
-
           // 2.0
-
           if (contents.indexOf('postMessage') !== -1) 
           {
             var blob = new Blob([contents], { type: 'text/javascript' });
             var url = URL.createObjectURL(blob);
-
             var worker = new Worker(url);
-
             worker.onmessage = function(event) 
             {
               event.data.metadata = { version: 2 };
               handleJSON(event.data, file, filename);
             };
-
             worker.postMessage(Date.now());
             return;
           }
-
           // >= 3.0
-
           var data;
-
           try 
           {
             data = JSON.parse(contents);
@@ -175,7 +148,6 @@ var Loader = function(editor)
             alert(error);
             return;
           }
-
           handleJSON(data, file, filename);
         }, false);
         reader.readAsText(file);
@@ -185,9 +157,7 @@ var Loader = function(editor)
         {
           var loader = new THREE.KMZLoader();
           var collada = loader.parse(event.target.result);
-
           collada.scene.name = filename;
-
           editor.execute(new AddObjectCommand(collada.scene));
         }, false);
         reader.readAsArrayBuffer(file);
@@ -202,11 +172,9 @@ var Loader = function(editor)
             morphTargets: true,
             morphNormals: true
           });
-
           var mesh = new THREE.Mesh(geometry, material);
           mesh.mixer = new THREE.AnimationMixer(mesh);
           mesh.name = filename;
-
           editor.execute(new AddObjectCommand(mesh));
         }, false);
         reader.readAsArrayBuffer(file);
@@ -226,10 +194,8 @@ var Loader = function(editor)
         {
           var contents = event.target.result;
           var json = JSON.parse(contents);
-
           var loader = new THREE.PlayCanvasLoader();
           var object = loader.parse(json);
-
           editor.execute(new AddObjectCommand(object));
         }, false);
         reader.readAsText(file);
@@ -238,16 +204,12 @@ var Loader = function(editor)
         reader.addEventListener('load', function(event) 
         {
           var contents = event.target.result;
-
           var geometry = new THREE.PLYLoader().parse(contents);
           geometry.sourceType = "ply";
           geometry.sourceFile = file.name;
-
           var material = new THREE.MeshStandardMaterial();
-
           var mesh = new THREE.Mesh(geometry, material);
           mesh.name = filename;
-
           editor.execute(new AddObjectCommand(mesh));
         }, false);
         reader.readAsText(file);
@@ -259,12 +221,9 @@ var Loader = function(editor)
           var geometry = new THREE.STLLoader().parse(contents);
           geometry.sourceType = "stl";
           geometry.sourceFile = file.name;
-
           var material = new THREE.MeshStandardMaterial();
-
           var mesh = new THREE.Mesh(geometry, material);
           mesh.name = filename;
-
           editor.execute(new AddObjectCommand(mesh));
         }, false);
 
@@ -302,16 +261,12 @@ var Loader = function(editor)
         reader.addEventListener('load', function(event) 
         {
           var contents = event.target.result;
-
           var geometry = new THREE.VTKLoader().parse(contents);
           geometry.sourceType = "vtk";
           geometry.sourceFile = file.name;
-
           var material = new THREE.MeshStandardMaterial();
-
           var mesh = new THREE.Mesh(geometry, material);
           mesh.name = filename;
-
           editor.execute(new AddObjectCommand(mesh));
         }, false);
         reader.readAsText(file);
