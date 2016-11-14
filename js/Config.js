@@ -10,7 +10,7 @@ var Config = function(name)
     'project/renderer/gammaInput': false,
     'project/renderer/gammaOutput': false,
     'project/renderer/shadows': true,
-    'project/editable': false,
+    'project/editable': true,
     'project/vr': false,
 
     'settings/history': false,
